@@ -9,8 +9,9 @@
 		<meta property="og:url" content="http://52.78.67.250/">
 		<meta property="og:image" content="http://52.78.67.250/static/mobile/images/logo_snc.png">
 		<meta property="og:description" content="SNC 개발자 센터에서 유용한 정보와 편리한 기능들을 사용해보세요">
-		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+		<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
  		<script type="text/javascript" src="js/jsonparser.js"></script>
+ 		<script type="text/javascript" src="js/clipboard.js"></script>
 		<script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
 	</head>
 	<body>
@@ -24,14 +25,28 @@
 			var $btnObjArr;
 
 			$(document).ready(function(){
-				$txt = $('#txt');
-				$view = $('#view');
-				$btn_txt = $('#btn_txt');
-				$btn_view = $('#btn_view');
-				$viewObjArr = $('.cont_view');
-				$btnObjArr = $('.btn_sw');
+				
+				// init object
+				$txt = $('#txt');				// Edit Text View
+				$view = $('#view');				// Json Contents View
+				$btn_txt = $('#btn_txt');		// Text View Switch Button
+				$btn_view = $('#btn_view');		// Json view Switch Button
+				$btn_copy = $('#btn_copy');		// Clipboard Copy Button
+				$viewObjArr = $('.cont_view');	// All View
+				$btnObjArr = $('.btn_sw');		// All View Switch Button
+
+				// init module - jsonparser
 				var elView = document.getElementById('view');
 				jsonParse = new JY_JSParse(elView, {});
+				// init module - clipboard
+				var elCopy = document.getElementById('btn_copy');
+				var clipboard = new Clipboard(elCopy, {
+					text: function(){
+						return $view.text();
+					}
+				});
+
+
 			});
 
 			function btnJsonView() {
@@ -73,20 +88,13 @@
 				}
 			}
 
-
-			function copy_to_clipboard() {
-  				window.clipboardData.setData("Text", "카피성공!!");
-  				alert("복사되었습니다.");
-			}
-
-
 		</script>
 		<div>
 			<button class="btn_sw" id="btn_txt" type="button" onclick="btnTextView();" disabled>TEXT</button>
 			<button class="btn_sw" id="btn_view" type="button" onclick="btnJsonView();">JSON</button>
-			<button type="button" onclick="copy_to_clipboard();">COPY</button>
+			<button id="btn_copy">COPY</button>
 		</div>
 		<textarea class="cont_view" rows="4" cols="50" id="txt">{"서재영":"개발자1","조현권":"개발자2","그룹A":{"서재영-1":"개발자1-1","조현권-1":"개발자1-2","그룹2":{"서재영-2":"개발자2-1","조현권2-1":"개발자2-2","그룹3":{"서재영-3":"개발자3-1","조현권-3":"개발자3-2"}}},"그룹B":{"서재영-1":"개발자1-1","조현권-1":"개발자1-2","그룹2":{"서재영-2":"개발자2-1","조현권2-1":"개발자2-2","그룹3":{"서재영-3":"개발자3-1","조현권-3":"개발자3-2"}}},"그룹C":{"서재영-1":"개발자1-1","조현권-1":"개발자1-2","그룹2":{"서재영-2":"개발자2-1","조현권2-1":"개발자2-2","그룹3":{"서재영-3":"개발자3-1","조현권-3":"개발자3-2"}}}}</textarea>
-		<pre class="cont_view" id="view" style="display:none;">123</pre>
+		<pre class="cont_view" id="view" style="display:none;"></pre>
 	</body>
 </html>
