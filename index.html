@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SNC Developer</title>
+		<meta charset="utf-8"></meta>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.0">	
+		<meta name="apple-mobile-web-app-title" content="SNC">
+		<meta property="og:title" content="SNC 개발자 센터">
+		<meta property="og:url" content="http://52.78.67.250/">
+		<meta property="og:image" content="http://52.78.67.250/static/mobile/images/logo_snc.png">
+		<meta property="og:description" content="SNC 개발자 센터에서 유용한 정보와 편리한 기능들을 사용해보세요">
+		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+ 		<script type="text/javascript" src="js/jsonparser.js"></script>
+		<script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var jsonParse = {};
+			var $txt;
+			var $view;
+			var $btn_txt;
+			var $btn_view;
+			var $viewObjArr;
+			var $btnObjArr;
+
+			$(document).ready(function(){
+				$txt = $('#txt');
+				$view = $('#view');
+				$btn_txt = $('#btn_txt');
+				$btn_view = $('#btn_view');
+				$viewObjArr = $('.cont_view');
+				$btnObjArr = $('.btn_sw');
+				var elView = document.getElementById('view');
+				jsonParse = new JY_JSParse(elView, {});
+			});
+
+			function btnJsonView() {
+				// Construction
+				if(jsonParse.strToJson($txt.val())){
+					jsonParse.printJson();
+					// View Control
+					viewControl('view');
+					btnControl('view');
+				}else{
+					alert(jsonParse.getErrorMsg());
+				}
+			}
+
+			function btnTextView() {
+				// Construction
+				// View Control
+				viewControl('txt');
+				btnControl('txt');
+			}
+
+			function viewControl(id) {
+				$viewObjArr.each(function(i, view){
+					$(view).hide();
+				});
+				switch(id){
+					case 'txt' : $txt.show();break;
+					case 'view' : $view.show();break;
+				}
+			}
+
+			function btnControl(id){
+				$btnObjArr.each(function(i, btn){
+					btn.disabled = '';
+				});
+				switch(id){
+					case 'txt' : $btn_txt.attr('disabled', true);break;
+					case 'view' : $btn_view.attr('disabled', true);break;
+				}
+			}
+
+
+			function copy_to_clipboard() {
+  				window.clipboardData.setData("Text", "카피성공!!");
+  				alert("복사되었습니다.");
+			}
+
+
+		</script>
+		<div>
+			<button class="btn_sw" id="btn_txt" type="button" onclick="btnTextView();" disabled>TEXT</button>
+			<button class="btn_sw" id="btn_view" type="button" onclick="btnJsonView();">JSON</button>
+			<button type="button" onclick="copy_to_clipboard();">COPY</button>
+		</div>
+		<textarea class="cont_view" rows="4" cols="50" id="txt">{"서재영":"개발자1","조현권":"개발자2","그룹A":{"서재영-1":"개발자1-1","조현권-1":"개발자1-2","그룹2":{"서재영-2":"개발자2-1","조현권2-1":"개발자2-2","그룹3":{"서재영-3":"개발자3-1","조현권-3":"개발자3-2"}}},"그룹B":{"서재영-1":"개발자1-1","조현권-1":"개발자1-2","그룹2":{"서재영-2":"개발자2-1","조현권2-1":"개발자2-2","그룹3":{"서재영-3":"개발자3-1","조현권-3":"개발자3-2"}}},"그룹C":{"서재영-1":"개발자1-1","조현권-1":"개발자1-2","그룹2":{"서재영-2":"개발자2-1","조현권2-1":"개발자2-2","그룹3":{"서재영-3":"개발자3-1","조현권-3":"개발자3-2"}}}}</textarea>
+		<pre class="cont_view" id="view" style="display:none;">123</pre>
+	</body>
+</html>
